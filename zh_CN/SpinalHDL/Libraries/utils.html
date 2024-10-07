@@ -421,7 +421,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../Structuring/naming.html#composite-in-a-function">函数中的复合区（Composite）</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../Structuring/naming.html#composite-chains">复合区级联链</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../Structuring/naming.html#composite-in-a-bundle-s-function">在一个线束（Bundle）的函数中的复合区</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../Structuring/naming.html#unamed-signal-handling">未命名信号处理</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../Structuring/naming.html#unnamed-signal-handling">Unnamed signal handling</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../Structuring/naming.html#verilog-expression-splitting">Verilog 表达式分割</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../Structuring/naming.html#verilog-long-expression-splitting">Verilog 长表达式分割</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../Structuring/naming.html#when-statement-condition">When 语句条件</a></li>
@@ -446,6 +446,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../Semantic/when_switch.html">When/Switch/Mux</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../Semantic/when_switch.html#when">When</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Semantic/when_switch.html#whenbuilder">WhenBuilder</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../Semantic/when_switch.html#switch">Switch</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../Semantic/when_switch.html#example">示例</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../Semantic/when_switch.html#additional-options">其他选项</a></li>
@@ -731,27 +732,27 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="Bus/index.html">总线</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Bus/amba3/ahblite3.html">AHB-Lite3</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="Bus/amba3/ahblite3.html#configuration-and-instanciation">配置和实例化</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Bus/amba3/ahblite3.html#configuration-and-instantiation">Configuration and instantiation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Bus/amba3/ahblite3.html#variations">变体</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Bus/amba3/apb3.html">Apb3</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="Bus/amba3/apb3.html#configuration-and-instanciation">配置和实例化</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Bus/amba3/apb3.html#configuration-and-instantiation">Configuration and instantiation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Bus/amba3/apb3.html#functions-and-operators">函数和运算符</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Bus/amba4/axi4.html">Axi4</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="Bus/amba4/axi4.html#configuration-and-instanciation">配置和实例化</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Bus/amba4/axi4.html#configuration-and-instantiation">Configuration and instantiation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Bus/amba4/axi4.html#variations">变体</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Bus/amba4/axi4.html#functions-and-operators">函数和运算符</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Bus/avalon/avalonmm.html">AvalonMM</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="Bus/avalon/avalonmm.html#configuration-and-instanciation">配置和实例化</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Bus/avalon/avalonmm.html#configuration-and-instantiation">Configuration and instantiation</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Bus/tilelink/tilelink.html">Tilelink</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="Bus/tilelink/tilelink.html#configuration-and-instanciation">配置和实例化</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Bus/tilelink/tilelink.html#configuration-and-instantiation">Configuration and instantiation</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Bus/tilelink/tilelink_fabric.html">tilelink.fabric.Node</a><ul>
@@ -842,7 +843,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Pipeline/introduction.html#builder">Builder</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Pipeline/introduction.html#composability">组合能力（Composability）</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Pipeline/introduction.html#retiming-variable-lenth">重定时/可变长度</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Pipeline/introduction.html#retiming-variable-length">Retiming / Variable length</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Pipeline/introduction.html#simple-cpu-example">简单的CPU示例</a></li>
 </ul>
 </li>
@@ -971,7 +972,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../Examples/Simple%20ones/rgb_to_gray.html">RGB信号转灰度信号</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../Examples/Simple%20ones/sinus_rom.html">正弦rom</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Examples/Simple%20ones/sinus_rom.html">正弦 ROM</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples/Intermediates%20ones/index.html">中级示例</a><ul>
@@ -1121,6 +1122,16 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../Developers%20area/bus_slave_factory_impl.html#conclusion">结论</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Developers%20area/howotuselocalspinalclone.html">项目中如何使用本地的SpinalHDL克隆作为依赖</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../Developers%20area/howotuselocalspinalclone.html#create-local-git-clone-of-spinalhdl">创建本地的SpinalHDL git 克隆</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Developers%20area/howotuselocalspinalclone.html#configure-buildsystem">配置构建系统</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../Developers%20area/howotuselocalspinalclone.html#configure-sbt-update-build-sbt">配置 sbt (更新 <code class="docutils literal notranslate"><span class="pre">build.sbt</span></code>)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Developers%20area/howotuselocalspinalclone.html#configure-mill-update-build-sc">配置 mill (更新 <code class="docutils literal notranslate"><span class="pre">build.sc</span></code>)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../Developers%20area/howotuselocalspinalclone.html#done">完成</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../Developers%20area/howtodocument.html">如何修改本文档</a><ul>
@@ -1368,7 +1379,7 @@
 <td><p>Vec[T]</p></td>
 <td><div class="line-block">
 <div class="line">返回长度为 <code class="docutils literal notranslate"><span class="pre">length</span></code> 的Vec</div>
-<div class="line">The first element is <code class="docutils literal notranslate"><span class="pre">that</span></code>, the last one is <code class="docutils literal notranslate"><span class="pre">that</span></code> delayed by <code class="docutils literal notranslate"><span class="pre">length</span></code> - 1</div>
+<div class="line">其第一个元素是 <code class="docutils literal notranslate"><span class="pre">that</span></code> ，最后一个元素是延迟了 <code class="docutils literal notranslate"><span class="pre">length</span></code> -1的 <code class="docutils literal notranslate"><span class="pre">that</span></code></div>
 <div class="line">内部移位寄存器会在 <code class="docutils literal notranslate"><span class="pre">when</span></code> 有效时采样</div>
 </div>
 </td>
@@ -1384,10 +1395,10 @@
 </td>
 <td><p>Vec[T]</p></td>
 <td><div class="line-block">
-<div class="line">Same as <code class="docutils literal notranslate"><span class="pre">History(that,</span> <span class="pre">length)</span></code></div>
-<div class="line">but return a Vec of size <code class="docutils literal notranslate"><span class="pre">range.length</span></code></div>
-<div class="line">where the first element is delayed by <code class="docutils literal notranslate"><span class="pre">range.low</span></code></div>
-<div class="line">and the last by <code class="docutils literal notranslate"><span class="pre">range.high</span></code></div>
+<div class="line">和 <code class="docutils literal notranslate"><span class="pre">History(that,</span> <span class="pre">length)</span></code> 相同</div>
+<div class="line">但返回长度为 <code class="docutils literal notranslate"><span class="pre">range.length</span></code> 的Vec</div>
+<div class="line">其中第一个元素延迟了 <code class="docutils literal notranslate"><span class="pre">range.low</span></code> 个周期</div>
+<div class="line">且最后一个是延迟了 <code class="docutils literal notranslate"><span class="pre">range.high</span></code> 个周期的元素</div>
 </div>
 </td>
 </tr>
@@ -1461,20 +1472,20 @@
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Timeout(cycles : BigInt)</p></td>
-<td><p>在 <code class="docutils literal notranslate"><span class="pre">cycles</span></code> 个时钟后标记</p></td>
+<td><p>在 <code class="docutils literal notranslate"><span class="pre">cycles</span></code> 个时钟周期后触发超时（tick）</p></td>
 </tr>
 <tr class="row-odd"><td><p>Timeout(time : TimeNumber)</p></td>
-<td><p>在持续 <code class="docutils literal notranslate"><span class="pre">time</span></code> 时间后标记</p></td>
+<td><p>在持续 <code class="docutils literal notranslate"><span class="pre">time</span></code> 时间后触发超时（tick）</p></td>
 </tr>
 <tr class="row-even"><td><p>Timeout(frequency : HertzNumber)</p></td>
-<td><p>以 <a href="#id1"><span class="problematic" id="id2">``</span></a>frequency``频率进行标记</p></td>
+<td><p>以 <code class="docutils literal notranslate"><span class="pre">frequency</span></code> 频率触发超时信号（tick）</p></td>
 </tr>
 </tbody>
 </table>
 <p>下方是可以与Counter工具一起使用的不同语法句式的示例</p>
-<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Timeout</span><span class="p">(</span><span class="mi">10</span><span class="w"> </span><span class="n">ms</span><span class="p">)</span><span class="w">  </span><span class="c1">//Timeout who tick after 10 ms</span>
-<span class="n">when</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">               </span><span class="c1">//Check if the timeout has tick</span>
-<span class="w">    </span><span class="n">timeout</span><span class="p">.</span><span class="n">clear</span><span class="p">()</span><span class="w">           </span><span class="c1">//Ask the timeout to clear its flag</span>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Timeout</span><span class="p">(</span><span class="mi">10</span><span class="w"> </span><span class="n">ms</span><span class="p">)</span><span class="w">  </span><span class="c1">// Timeout who tick after 10 ms</span>
+<span class="n">when</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">               </span><span class="c1">// Check if the timeout has tick</span>
+<span class="w">    </span><span class="n">timeout</span><span class="p">.</span><span class="n">clear</span><span class="p">()</span><span class="w">           </span><span class="c1">// Ask the timeout to clear its flag</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -1488,7 +1499,7 @@
 <p>复位控制(ResetCtrl)提供了一些实用工具来管理复位。</p>
 <section id="asyncassertsyncdeassert">
 <h4>asyncAssertSyncDeassert<a class="headerlink" href="#asyncassertsyncdeassert" title="此标题的永久链接"></a></h4>
-<p>您可以使用异步有效同步无效逻辑来筛选异步复位。为此，您可以使用 <code class="docutils literal notranslate"><span class="pre">ResetCtrl.asyncAssertSyncDeassert</span></code> 函数返回筛选后的值。</p>
+<p>You can filter an asynchronous reset by using an asynchronously asserted synchronously deasserted logic. To do it you can use the <code class="docutils literal notranslate"><span class="pre">ResetCtrl.asyncAssertSyncDeassert</span></code> function which will return you the filtered value.</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 17%" />
@@ -1504,11 +1515,11 @@
 <tbody>
 <tr class="row-even"><td><p>input</p></td>
 <td><p>Bool</p></td>
-<td><p>被筛选的信号</p></td>
+<td><p>输入的异步信号，用于触发复位</p></td>
 </tr>
 <tr class="row-odd"><td><p>clockDomain</p></td>
 <td><p>ClockDomain</p></td>
-<td><p>返回将使用所筛选值的时钟域(ClockDomain)</p></td>
+<td><p>返回的新复位信号对齐的时钟域(ClockDomain)</p></td>
 </tr>
 <tr class="row-even"><td><p>inputPolarity</p></td>
 <td><p>Polarity</p></td>
@@ -1524,7 +1535,7 @@
 </tr>
 </tbody>
 </table>
-<p>另外还有一个 <code class="docutils literal notranslate"><span class="pre">ResetCtrl.asyncAssertSyncDeassertDrive</span></code> 版本的工具，它直接使用筛选后的值为 <code class="docutils literal notranslate"><span class="pre">clockDomain</span></code> 的复位赋值。</p>
+<p>另外还有一个 <code class="docutils literal notranslate"><span class="pre">ResetCtrl.asyncAssertSyncDeassertDrive</span></code> 版本的工具，它直接使用新构造的复位信号作为 <code class="docutils literal notranslate"><span class="pre">clockDomain</span></code> 这个时钟域的复位。</p>
 </section>
 </section>
 </section>
@@ -1547,7 +1558,7 @@
 <td><p>Int</p></td>
 <td><div class="line-block">
 <div class="line">以周期为单位返回经过所有节点的最短路径，</div>
-<div class="line">第一个节点到最后一个节点</div>
+<div class="line">从第一个节点到最后一个节点</div>
 </div>
 </td>
 </tr>

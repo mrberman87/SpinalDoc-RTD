@@ -473,7 +473,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../Sequential%20logic/registers.html#reset-value">Reset value</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../Sequential%20logic/registers.html#initialization-value-for-simulation-purposes">Initialization value for simulation purposes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../Sequential%20logic/registers.html#register-vectors">Register vectors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../Sequential%20logic/registers.html#transforming-a-wire-into-a-register">Transforming a wire into a register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Sequential%20logic/registers.html#transforming-a-signal-into-a-register">Transforming a signal into a register</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../Sequential%20logic/memory.html">RAM/ROM Memory</a><ul>
@@ -684,6 +684,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../Libraries/fsm.html#statefsm">StateFsm</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../Libraries/fsm.html#stateparallelfsm">StateParallelFsm</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../Libraries/fsm.html#notes-about-the-entry-state">Notes about the entry state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Libraries/fsm.html#notes-about-using-state-value">Notes about using state value</a></li>
 </ul>
 </li>
 </ul>
@@ -840,7 +841,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#your-custom-link">Your custom Link</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#builder">Builder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#builders">Builders</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#stagepipeline">StagePipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#stagectrlpipeline">StageCtrlPipeline</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#composability">Composability</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#retiming-variable-length">Retiming / Variable length</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#simple-cpu-example">Simple CPU example</a></li>
@@ -1246,8 +1251,8 @@ within a project.</p>
 <p>As an example of where this is used you can also refer to <a class="reference external" href="https://github.com/SpinalHDL/VexiiRiscv/blob/dev/build.sbt">VexiiRiscv</a>.</p>
 <section id="create-local-git-clone-of-spinalhdl">
 <h2>Create local git clone of SpinalHDL<a class="headerlink" href="#create-local-git-clone-of-spinalhdl" title="Permalink to this heading"></a></h2>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/somewhere
-git<span class="w"> </span>clone<span class="w"> </span>--depth<span class="w"> </span><span class="m">1</span><span class="w"> </span>-b<span class="w"> </span>dev<span class="w"> </span>https://github.com/SpinalHDL/SpinalHDL.git
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /somewhere
+git clone --depth <span class="m">1</span> -b dev https://github.com/SpinalHDL/SpinalHDL.git
 </pre></div>
 </div>
 <p>In the command above you can replace <code class="docutils literal notranslate"><span class="pre">dev</span></code> by the name of the branch you want
@@ -1263,62 +1268,63 @@ git folder as dependency:</p>
 <span class="nc">ThisBuild</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">scalaVersion</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;2.12.18&quot;</span><span class="w">     </span><span class="c1">// change as needed</span>
 <span class="nc">ThisBuild</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">organization</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;org.example&quot;</span><span class="w"> </span><span class="c1">// change as needed</span>
 
-<span class="kd">val</span><span class="w"> </span><span class="n">spinalRoot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">file</span><span class="p">(</span><span class="s">&quot;/somewhere/SpinalHDL&quot;</span><span class="p">)</span>
-<span class="k">lazy</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="n">spinalIdslPlugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ProjectRef</span><span class="p">(</span><span class="n">spinalRoot</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;idslplugin&quot;</span><span class="p">)</span>
-<span class="k">lazy</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="n">spinalSim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ProjectRef</span><span class="p">(</span><span class="n">spinalRoot</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sim&quot;</span><span class="p">)</span>
-<span class="k">lazy</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="n">spinalCore</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ProjectRef</span><span class="p">(</span><span class="n">spinalRoot</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;core&quot;</span><span class="p">)</span>
-<span class="k">lazy</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="n">spinalLib</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ProjectRef</span><span class="p">(</span><span class="n">spinalRoot</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;lib&quot;</span><span class="p">)</span>
+<span class="kd">val</span><span class="w"> </span><span class="n">spinalRoot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">file</span><span class="p">(</span><span class="s">&quot;/somewhere/SpinalHDL&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="k">lazy</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="n">spinalIdslPlugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ProjectRef</span><span class="p">(</span><span class="n">spinalRoot</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;idslplugin&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="k">lazy</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="n">spinalSim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ProjectRef</span><span class="p">(</span><span class="n">spinalRoot</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sim&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="k">lazy</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="n">spinalCore</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ProjectRef</span><span class="p">(</span><span class="n">spinalRoot</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;core&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="k">lazy</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="n">spinalLib</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ProjectRef</span><span class="p">(</span><span class="n">spinalRoot</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;lib&quot;</span><span class="p">)</span><span class="w"></span>
 
-<span class="k">lazy</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="n">projectname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">project</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="n">file</span><span class="p">(</span><span class="s">&quot;.&quot;</span><span class="p">))</span>
-<span class="p">.</span><span class="n">settings</span><span class="p">(</span>
-<span class="w">   </span><span class="nc">Compile</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">scalaSource</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">baseDirectory</span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s">&quot;hw&quot;</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s">&quot;spinal&quot;</span><span class="p">,</span>
-<span class="p">).</span><span class="n">dependsOn</span><span class="p">(</span><span class="n">spinalIdslPlugin</span><span class="p">,</span><span class="w"> </span><span class="n">spinalSim</span><span class="p">,</span><span class="w"> </span><span class="n">spinalCore</span><span class="p">,</span><span class="w"> </span><span class="n">spinalLib</span><span class="p">)</span>
+<span class="k">lazy</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="n">projectname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">project</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="n">file</span><span class="p">(</span><span class="s">&quot;.&quot;</span><span class="p">))</span><span class="w"></span>
+<span class="p">.</span><span class="n">settings</span><span class="p">(</span><span class="w"></span>
+<span class="w">   </span><span class="nc">Compile</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">scalaSource</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">baseDirectory</span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s">&quot;hw&quot;</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s">&quot;spinal&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="p">).</span><span class="n">dependsOn</span><span class="p">(</span><span class="n">spinalIdslPlugin</span><span class="p">,</span><span class="w"> </span><span class="n">spinalSim</span><span class="p">,</span><span class="w"> </span><span class="n">spinalCore</span><span class="p">,</span><span class="w"> </span><span class="n">spinalLib</span><span class="p">)</span><span class="w"></span>
 
-<span class="n">scalacOptions</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span><span class="n">spinalIdslPlugin</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nc">Compile</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">packageBin</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">artifactPath</span><span class="p">).</span><span class="n">map</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="o">=&gt;</span>
-<span class="w">  </span><span class="s">s&quot;-Xplugin:</span><span class="si">${</span><span class="n">file</span><span class="p">.</span><span class="n">getAbsolutePath</span><span class="si">}</span><span class="s">&quot;</span>
-<span class="p">}.</span><span class="n">value</span>
+<span class="n">scalacOptions</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span><span class="n">spinalIdslPlugin</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nc">Compile</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">packageBin</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">artifactPath</span><span class="p">).</span><span class="n">map</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"></span>
+<span class="w">  </span><span class="s">s&quot;-Xplugin:</span><span class="si">${</span><span class="n">file</span><span class="p">.</span><span class="n">getAbsolutePath</span><span class="si">}</span><span class="s">&quot;</span><span class="w"></span>
+<span class="p">}.</span><span class="n">value</span><span class="w"></span>
 
-<span class="n">fork</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">fork</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
 <section id="configure-mill-update-build-sc">
 <h3>Configure mill (update <code class="docutils literal notranslate"><span class="pre">build.sc</span></code>)<a class="headerlink" href="#configure-mill-update-build-sc" title="Permalink to this heading"></a></h3>
-<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span>import mill._, scalalib._
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="nn">mill</span><span class="p">.</span><span class="n">_</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">scalalib</span><span class="p">.</span><span class="n">_</span>
 
-import $file.^.SpinalHDL.build
-import ^.SpinalHDL.build.{core =&gt; spinalCore}
-import ^.SpinalHDL.build.{lib =&gt; spinalLib}
-import ^.SpinalHDL.build.{idslplugin =&gt; spinalIdslplugin}
+<span class="k">import</span><span class="w"> </span><span class="nn">$file</span><span class="p">.</span><span class="nn">^</span><span class="p">.</span><span class="nc">SpinalHDL</span><span class="p">.</span><span class="n">build</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">^</span><span class="p">.</span><span class="nc">SpinalHDL</span><span class="p">.</span><span class="nn">build</span><span class="p">.{</span><span class="n">core</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">spinalCore</span><span class="p">}</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">^</span><span class="p">.</span><span class="nc">SpinalHDL</span><span class="p">.</span><span class="nn">build</span><span class="p">.{</span><span class="n">lib</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">spinalLib</span><span class="p">}</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">^</span><span class="p">.</span><span class="nc">SpinalHDL</span><span class="p">.</span><span class="nn">build</span><span class="p">.{</span><span class="n">idslplugin</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">spinalIdslplugin</span><span class="p">}</span>
 
-val spinalVers = &quot;1.10.2a&quot;
-val scalaVers = &quot;2.12.18&quot;
+<span class="kd">val</span><span class="w"> </span><span class="n">spinalVers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;1.10.2a&quot;</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">scalaVers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;2.12.18&quot;</span><span class="w"></span>
 
-object projectname extends RootModule with SbtModule {
-   def scalaVersion = scalaVers
-   def sources = T.sources(
-      this.millSourcePath / &quot;hw&quot; / &quot;spinal&quot;
-   )
+<span class="k">object</span><span class="w"> </span><span class="nc">projectname</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">RootModule</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="nc">SbtModule</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">   </span><span class="k">def</span><span class="w"> </span><span class="nf">scalaVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scalaVers</span><span class="w"></span>
+<span class="w">   </span><span class="k">def</span><span class="w"> </span><span class="nf">sources</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">T</span><span class="p">.</span><span class="n">sources</span><span class="p">(</span><span class="w"></span>
+<span class="w">      </span><span class="bp">this</span><span class="p">.</span><span class="n">millSourcePath</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s">&quot;hw&quot;</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s">&quot;spinal&quot;</span><span class="w"></span>
+<span class="w">   </span><span class="p">)</span><span class="w"></span>
 
-   def idslplugin = spinalIdslplugin(scalaVers)
-   def moduleDeps = Seq(
-      spinalCore(scalaVers),
-      spinalLib(scalaVers),
-      idslplugin
-   )
-   def scalacOptions = super.scalacOptions() ++ idslplugin.pluginOptions()
-}
+<span class="w">   </span><span class="k">def</span><span class="w"> </span><span class="nf">idslplugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spinalIdslplugin</span><span class="p">(</span><span class="n">scalaVers</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="k">def</span><span class="w"> </span><span class="nf">moduleDeps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Seq</span><span class="p">(</span><span class="w"></span>
+<span class="w">      </span><span class="n">spinalCore</span><span class="p">(</span><span class="n">scalaVers</span><span class="p">),</span><span class="w"></span>
+<span class="w">      </span><span class="n">spinalLib</span><span class="p">(</span><span class="n">scalaVers</span><span class="p">),</span><span class="w"></span>
+<span class="w">      </span><span class="n">idslplugin</span><span class="w"></span>
+<span class="w">   </span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="k">def</span><span class="w"> </span><span class="nf">scalacOptions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">super</span><span class="p">.</span><span class="n">scalacOptions</span><span class="p">()</span><span class="w"> </span><span class="o">++</span><span class="w"> </span><span class="n">idslplugin</span><span class="p">.</span><span class="n">pluginOptions</span><span class="p">()</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
 <p>Note the line <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">$file.^.SpinalHDL.build</span></code>. It is using ammonite REPL
 magic <code class="docutils literal notranslate"><span class="pre">$file</span></code> to look up the <code class="docutils literal notranslate"><span class="pre">build.sc</span></code> of SpinalHDL. (The <code class="docutils literal notranslate"><span class="pre">^</span></code> moves up
 one directory from the current.) This is assuming the following directory
 structure:</p>
-<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">somewhere</span>
-<span class="o">|-</span><span class="nc">SpinalHDL</span><span class="w">   </span><span class="n">#</span><span class="w"> </span><span class="o">&lt;--</span><span class="w"> </span><span class="n">cloned</span><span class="w"> </span><span class="n">spinal</span><span class="w"> </span><span class="n">git</span>
-<span class="o">|</span><span class="w"> </span><span class="o">|-</span><span class="n">build</span><span class="p">.</span><span class="n">sc</span>
-<span class="o">|-</span><span class="n">projectname</span>
-<span class="o">|</span><span class="w"> </span><span class="o">|-</span><span class="n">build</span><span class="p">.</span><span class="n">sc</span><span class="w">  </span><span class="n">#</span><span class="w"> </span><span class="o">&lt;--</span><span class="w"> </span><span class="n">your</span><span class="w"> </span><span class="n">project</span><span class="p">,</span><span class="w"> </span><span class="n">mill</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">ran</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="n">here</span>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">somewhere</span><span class="w"></span>
+<span class="o">|-</span><span class="nc">SpinalHDL</span><span class="w">   </span><span class="n">#</span><span class="w"> </span><span class="o">&lt;--</span><span class="w"> </span><span class="n">cloned</span><span class="w"> </span><span class="n">spinal</span><span class="w"> </span><span class="n">git</span><span class="w"></span>
+<span class="o">|</span><span class="w"> </span><span class="o">|-</span><span class="n">build</span><span class="p">.</span><span class="n">sc</span><span class="w"></span>
+<span class="o">|-</span><span class="n">projectname</span><span class="w"></span>
+<span class="o">|</span><span class="w"> </span><span class="o">|-</span><span class="n">build</span><span class="p">.</span><span class="n">sc</span><span class="w">  </span><span class="n">#</span><span class="w"> </span><span class="o">&lt;--</span><span class="w"> </span><span class="n">your</span><span class="w"> </span><span class="n">project</span><span class="p">,</span><span class="w"> </span><span class="n">mill</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">ran</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="n">here</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
@@ -1352,7 +1358,7 @@ your project should compile as usual.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2018 - 2024, SpinalHDL.</p>
+    <p>&#169; Copyright 2018 - 2025, SpinalHDL.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
@@ -1363,7 +1369,7 @@ your project should compile as usual.</p>
     <!-- source/_templates/footer.html -->
     
     <div class="doc-footer-current-version"><p>
-    Version: master git~843c6decd5 2024-10-07
+    Version: master git~4cdfdf7a60 2025-05-29
     </p></div>
     
 
@@ -1383,11 +1389,14 @@ your project should compile as usual.</p>
   <div class="rst-other-versions">
     <dl>
        <dt>Languages</dt>
-       <dd class="rtd-current-item">
-         <a href="#">en</a>
-       </dd>
        
-       <dd><a href="/SpinalDoc-RTD/zh_CN/index.html">zh_CN</a></dd>
+          
+            <dd class="rtd-current-item"><a href="#">en</a></dd>
+          
+       
+          
+            <dd><a href="../zh_CN/index.html">zh_CN</a></dd>
+          
        
     </dl>
     <dl>

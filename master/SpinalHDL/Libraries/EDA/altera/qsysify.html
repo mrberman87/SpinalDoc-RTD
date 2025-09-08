@@ -473,7 +473,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../Sequential%20logic/registers.html#reset-value">Reset value</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../Sequential%20logic/registers.html#initialization-value-for-simulation-purposes">Initialization value for simulation purposes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../Sequential%20logic/registers.html#register-vectors">Register vectors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../Sequential%20logic/registers.html#transforming-a-wire-into-a-register">Transforming a wire into a register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../Sequential%20logic/registers.html#transforming-a-signal-into-a-register">Transforming a signal into a register</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../Sequential%20logic/memory.html">RAM/ROM Memory</a><ul>
@@ -684,6 +684,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../fsm.html#statefsm">StateFsm</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../fsm.html#stateparallelfsm">StateParallelFsm</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../fsm.html#notes-about-the-entry-state">Notes about the entry state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../fsm.html#notes-about-using-state-value">Notes about using state value</a></li>
 </ul>
 </li>
 </ul>
@@ -840,7 +841,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../../Pipeline/introduction.html#your-custom-link">Your custom Link</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../../Pipeline/introduction.html#builder">Builder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Pipeline/introduction.html#builders">Builders</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../Pipeline/introduction.html#stagepipeline">StagePipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Pipeline/introduction.html#stagectrlpipeline">StageCtrlPipeline</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../../Pipeline/introduction.html#composability">Composability</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../Pipeline/introduction.html#retiming-variable-length">Retiming / Variable length</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../Pipeline/introduction.html#simple-cpu-example">Simple CPU example</a></li>
@@ -1250,29 +1255,29 @@
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
 <p>In the case of a UART controller :</p>
-<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">AvalonMMUartCtrl</span><span class="p">(...)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">bus</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="n">slave</span><span class="p">(</span><span class="nc">AvalonMM</span><span class="p">(</span><span class="nc">AvalonMMUartCtrl</span><span class="p">.</span><span class="n">getAvalonMMConfig</span><span class="p">))</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">uart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">master</span><span class="p">(</span><span class="nc">Uart</span><span class="p">())</span>
-<span class="w">  </span><span class="p">}</span>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">AvalonMMUartCtrl</span><span class="p">(...)</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">Bundle</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">bus</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="n">slave</span><span class="p">(</span><span class="nc">AvalonMM</span><span class="p">(</span><span class="nc">AvalonMMUartCtrl</span><span class="p">.</span><span class="n">getAvalonMMConfig</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">uart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">master</span><span class="p">(</span><span class="nc">Uart</span><span class="p">())</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
 
 <span class="w">  </span><span class="c1">// ...</span>
-<span class="p">}</span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
 <p>The following  <code class="docutils literal notranslate"><span class="pre">main</span></code> will generate the Verilog and the QSys TCL script with io.bus as an AvalonMM and io.uart as a conduit :</p>
-<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">object</span><span class="w"> </span><span class="nc">AvalonMMUartCtrl</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span><span class="w"> </span><span class="nc">Array</span><span class="p">[</span><span class="nc">String</span><span class="p">])</span><span class="w"> </span><span class="p">{</span>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">object</span><span class="w"> </span><span class="nc">AvalonMMUartCtrl</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span><span class="w"> </span><span class="nc">Array</span><span class="p">[</span><span class="nc">String</span><span class="p">])</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="c1">// Generate the Verilog</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">toplevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">SpinalVerilog</span><span class="p">(</span><span class="nc">AvalonMMUartCtrl</span><span class="p">(</span><span class="nc">UartCtrlMemoryMappedConfig</span><span class="p">(...))).</span><span class="n">toplevel</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="n">toplevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">SpinalVerilog</span><span class="p">(</span><span class="nc">AvalonMMUartCtrl</span><span class="p">(</span><span class="nc">UartCtrlMemoryMappedConfig</span><span class="p">(...))).</span><span class="n">toplevel</span><span class="w"></span>
 
 <span class="w">    </span><span class="c1">// Add some tags to the avalon bus to specify it&#39;s clock domain (information used by QSysify)</span>
-<span class="w">    </span><span class="n">toplevel</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">bus</span><span class="w"> </span><span class="n">addTag</span><span class="p">(</span><span class="nc">ClockDomainTag</span><span class="p">(</span><span class="n">toplevel</span><span class="p">.</span><span class="n">clockDomain</span><span class="p">))</span>
+<span class="w">    </span><span class="n">toplevel</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">bus</span><span class="w"> </span><span class="n">addTag</span><span class="p">(</span><span class="nc">ClockDomainTag</span><span class="p">(</span><span class="n">toplevel</span><span class="p">.</span><span class="n">clockDomain</span><span class="p">))</span><span class="w"></span>
 
 <span class="w">    </span><span class="c1">// Generate the QSys IP (tcl script)</span>
-<span class="w">    </span><span class="nc">QSysify</span><span class="p">(</span><span class="n">toplevel</span><span class="p">)</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">}</span>
+<span class="w">    </span><span class="nc">QSysify</span><span class="p">(</span><span class="n">toplevel</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
@@ -1281,19 +1286,19 @@
 <p>Because QSys require some information that are not specified in the SpinalHDL hardware specification, some tags should be added to interface:</p>
 <section id="avalonmm-apb3">
 <h3>AvalonMM / APB3<a class="headerlink" href="#avalonmm-apb3" title="Permalink to this heading"></a></h3>
-<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">io</span><span class="p">.</span><span class="n">bus</span><span class="w"> </span><span class="n">addTag</span><span class="p">(</span><span class="nc">ClockDomainTag</span><span class="p">(</span><span class="n">busClockDomain</span><span class="p">))</span>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">io</span><span class="p">.</span><span class="n">bus</span><span class="w"> </span><span class="n">addTag</span><span class="p">(</span><span class="nc">ClockDomainTag</span><span class="p">(</span><span class="n">busClockDomain</span><span class="p">))</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
 <section id="interrupt-input">
 <h3>Interrupt input<a class="headerlink" href="#interrupt-input" title="Permalink to this heading"></a></h3>
-<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">io</span><span class="p">.</span><span class="n">interrupt</span><span class="w"> </span><span class="n">addTag</span><span class="p">(</span><span class="nc">InterruptReceiverTag</span><span class="p">(</span><span class="n">relatedMemoryInterfacei</span><span class="p">,</span><span class="w"> </span><span class="n">interruptClockDomain</span><span class="p">))</span>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">io</span><span class="p">.</span><span class="n">interrupt</span><span class="w"> </span><span class="n">addTag</span><span class="p">(</span><span class="nc">InterruptReceiverTag</span><span class="p">(</span><span class="n">relatedMemoryInterfacei</span><span class="p">,</span><span class="w"> </span><span class="n">interruptClockDomain</span><span class="p">))</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
 <section id="reset-output">
 <h3>Reset output<a class="headerlink" href="#reset-output" title="Permalink to this heading"></a></h3>
-<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">io</span><span class="p">.</span><span class="n">resetOutput</span><span class="w"> </span><span class="n">addTag</span><span class="p">(</span><span class="nc">ResetEmitterTag</span><span class="p">(</span><span class="n">resetOutputClockDomain</span><span class="p">))</span>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">io</span><span class="p">.</span><span class="n">resetOutput</span><span class="w"> </span><span class="n">addTag</span><span class="p">(</span><span class="nc">ResetEmitterTag</span><span class="p">(</span><span class="n">resetOutputClockDomain</span><span class="p">))</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
@@ -1323,7 +1328,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2018 - 2024, SpinalHDL.</p>
+    <p>&#169; Copyright 2018 - 2025, SpinalHDL.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
@@ -1334,7 +1339,7 @@
     <!-- source/_templates/footer.html -->
     
     <div class="doc-footer-current-version"><p>
-    Version: master git~843c6decd5 2024-10-07
+    Version: master git~4cdfdf7a60 2025-05-29
     </p></div>
     
 
@@ -1354,11 +1359,14 @@
   <div class="rst-other-versions">
     <dl>
        <dt>Languages</dt>
-       <dd class="rtd-current-item">
-         <a href="#">en</a>
-       </dd>
        
-       <dd><a href="/SpinalDoc-RTD/zh_CN/index.html">zh_CN</a></dd>
+          
+            <dd class="rtd-current-item"><a href="#">en</a></dd>
+          
+       
+          
+            <dd><a href="../zh_CN/index.html">zh_CN</a></dd>
+          
        
     </dl>
     <dl>

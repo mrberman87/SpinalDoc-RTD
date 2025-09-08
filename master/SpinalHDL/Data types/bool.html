@@ -473,7 +473,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../Sequential%20logic/registers.html#reset-value">Reset value</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../Sequential%20logic/registers.html#initialization-value-for-simulation-purposes">Initialization value for simulation purposes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../Sequential%20logic/registers.html#register-vectors">Register vectors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../Sequential%20logic/registers.html#transforming-a-wire-into-a-register">Transforming a wire into a register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Sequential%20logic/registers.html#transforming-a-signal-into-a-register">Transforming a signal into a register</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../Sequential%20logic/memory.html">RAM/ROM Memory</a><ul>
@@ -684,6 +684,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../Libraries/fsm.html#statefsm">StateFsm</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../Libraries/fsm.html#stateparallelfsm">StateParallelFsm</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../Libraries/fsm.html#notes-about-the-entry-state">Notes about the entry state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Libraries/fsm.html#notes-about-using-state-value">Notes about using state value</a></li>
 </ul>
 </li>
 </ul>
@@ -840,7 +841,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#your-custom-link">Your custom Link</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#builder">Builder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#builders">Builders</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#stagepipeline">StagePipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#stagectrlpipeline">StageCtrlPipeline</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#composability">Composability</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#retiming-variable-length">Retiming / Variable length</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#simple-cpu-example">Simple CPU example</a></li>
@@ -1239,7 +1244,7 @@
 <span id="id1"></span><h1>Bool<a class="headerlink" href="#bool" title="Permalink to this heading"></a></h1>
 <section id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">Bool</span></code> type corresponds to a boolean value (True or False) or a single bit/wire
+<p>The <code class="docutils literal notranslate"><span class="pre">Bool</span></code> type corresponds to a boolean value (True or False) or a single bit/signal
 used in a hardware design.  While named similarly it should not be confused with
 Scala <cite>Boolean</cite> type which does not describe hardware but truth values in the Scala
 generator code.</p>
@@ -1262,7 +1267,7 @@ The use of the Bool instance on the left-hand-side or the right-hand-side of the
 assignment operator <cite>:=</cite> dictates if it is a source (provides state) or sink
 (captures state) for a given assignment.</p>
 <p>Multiple uses of the assignment operator are allowed, such that it is normal
-for a signal wire to act as a source (provides a value to drive HDL state) to be
+for a signal to act as a source (provides a value to drive HDL state) to be
 able to connect and drive multiple inputs of other HDL constructs.  When a Bool
 instance used as a source the order the assignment statements appear or are
 executed in Scala does not matter, unlike when it is used as a sink
@@ -1388,27 +1393,27 @@ This explicitly converts to <code class="docutils literal notranslate"><span cla
 </tr>
 </tbody>
 </table>
-<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
 <span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">a</span><span class="w"> </span><span class="n">&amp;</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="n">^</span><span class="w"> </span><span class="n">c</span><span class="w">   </span><span class="c1">// ((NOT a) AND b) XOR c</span>
 
-<span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">False</span>
-<span class="w"> </span><span class="n">when</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">False</span><span class="w"></span>
+<span class="w"> </span><span class="n">when</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">   </span><span class="n">d</span><span class="p">.</span><span class="n">set</span><span class="p">()</span><span class="w">                </span><span class="c1">// equivalent to d := True</span>
-<span class="w"> </span><span class="p">}</span>
+<span class="w"> </span><span class="p">}</span><span class="w"></span>
 
-<span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">False</span>
+<span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">False</span><span class="w"></span>
 <span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">setWhen</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span><span class="w">          </span><span class="c1">// equivalent to when(cond) { d := True }</span>
 
-<span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">RegInit</span><span class="p">(</span><span class="nc">False</span><span class="p">)</span><span class="w"> </span><span class="n">fallWhen</span><span class="p">(</span><span class="n">ack</span><span class="p">)</span><span class="w"> </span><span class="n">setWhen</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+<span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">RegInit</span><span class="p">(</span><span class="nc">False</span><span class="p">)</span><span class="w"> </span><span class="n">fallWhen</span><span class="p">(</span><span class="n">ack</span><span class="p">)</span><span class="w"> </span><span class="n">setWhen</span><span class="p">(</span><span class="n">req</span><span class="p">)</span><span class="w"></span>
 <span class="w"> </span><span class="cm">/** equivalent to</span>
 <span class="cm">  * when(f &amp;&amp; ack) { f := False }</span>
 <span class="cm">  * when(req) { f := True }</span>
 <span class="cm">  * or</span>
 <span class="cm">  * f := req || (f &amp;&amp; !ack)</span>
-<span class="cm">  */</span>
+<span class="cm">  */</span><span class="w"></span>
 
 <span class="c1">// mind the order of assignments!  last one wins</span>
-<span class="kd">val</span><span class="w"> </span><span class="n">g</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">RegInit</span><span class="p">(</span><span class="nc">False</span><span class="p">)</span><span class="w"> </span><span class="n">setWhen</span><span class="p">(</span><span class="n">req</span><span class="p">)</span><span class="w"> </span><span class="n">fallWhen</span><span class="p">(</span><span class="n">ack</span><span class="p">)</span>
+<span class="kd">val</span><span class="w"> </span><span class="n">g</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">RegInit</span><span class="p">(</span><span class="nc">False</span><span class="p">)</span><span class="w"> </span><span class="n">setWhen</span><span class="p">(</span><span class="n">req</span><span class="p">)</span><span class="w"> </span><span class="n">fallWhen</span><span class="p">(</span><span class="n">ack</span><span class="p">)</span><span class="w"></span>
 <span class="c1">// equivalent to g := ((!g) &amp;&amp; req) || (g &amp;&amp; !ack)</span>
 </pre></div>
 </div>
@@ -1417,8 +1422,8 @@ This explicitly converts to <code class="docutils literal notranslate"><span cla
 <h3>Edge detection<a class="headerlink" href="#edge-detection" title="Permalink to this heading"></a></h3>
 <p>All edge detection functions will instantiate an additional register via <a class="reference internal" href="../Sequential%20logic/registers.html#regnext"><span class="std std-ref">RegNext</span></a>
 to get a delayed value of the <code class="docutils literal notranslate"><span class="pre">Bool</span></code> in question.</p>
-<p>This feature does not reconfigure a D-type Flip-Flop to use an alternative CLK
-source, it uses two D-type Flip-Flop in series chain (with both CLK pins inheriting
+<p>This feature does not reconfigure a D-type flip-flop to use an alternative CLK
+source, it uses two D-type flip-flop in series chain (with both CLK pins inheriting
 the default ClockDomain).  It has combinational logic to perform edge detection
 based on the output Q states.</p>
 <table class="docutils align-default">
@@ -1472,21 +1477,21 @@ based on the output Q states.</p>
 </tr>
 </tbody>
 </table>
-<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">when</span><span class="p">(</span><span class="n">myBool_1</span><span class="p">.</span><span class="n">rise</span><span class="p">(</span><span class="nc">False</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">when</span><span class="p">(</span><span class="n">myBool_1</span><span class="p">.</span><span class="n">rise</span><span class="p">(</span><span class="nc">False</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="c1">// do something when a rising edge is detected</span>
-<span class="p">}</span>
+<span class="p">}</span><span class="w"></span>
 
 
-<span class="kd">val</span><span class="w"> </span><span class="n">edgeBundle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">myBool_2</span><span class="p">.</span><span class="n">edges</span><span class="p">(</span><span class="nc">False</span><span class="p">)</span>
-<span class="n">when</span><span class="p">(</span><span class="n">edgeBundle</span><span class="p">.</span><span class="n">rise</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="kd">val</span><span class="w"> </span><span class="n">edgeBundle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">myBool_2</span><span class="p">.</span><span class="n">edges</span><span class="p">(</span><span class="nc">False</span><span class="p">)</span><span class="w"></span>
+<span class="n">when</span><span class="p">(</span><span class="n">edgeBundle</span><span class="p">.</span><span class="n">rise</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="c1">// do something when a rising edge is detected</span>
-<span class="p">}</span>
-<span class="n">when</span><span class="p">(</span><span class="n">edgeBundle</span><span class="p">.</span><span class="n">fall</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="p">}</span><span class="w"></span>
+<span class="n">when</span><span class="p">(</span><span class="n">edgeBundle</span><span class="p">.</span><span class="n">fall</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="c1">// do something when a falling edge is detected</span>
-<span class="p">}</span>
-<span class="n">when</span><span class="p">(</span><span class="n">edgeBundle</span><span class="p">.</span><span class="n">toggle</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="p">}</span><span class="w"></span>
+<span class="n">when</span><span class="p">(</span><span class="n">edgeBundle</span><span class="p">.</span><span class="n">toggle</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="c1">// do something at each edge</span>
-<span class="p">}</span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
@@ -1512,11 +1517,11 @@ based on the output Q states.</p>
 </table>
 <div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">when</span><span class="p">(</span><span class="n">myBool</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// Equivalent to when(myBool === True)</span>
 <span class="w">    </span><span class="c1">// do something when myBool is True</span>
-<span class="p">}</span>
+<span class="p">}</span><span class="w"></span>
 
 <span class="n">when</span><span class="p">(</span><span class="o">!</span><span class="n">myBool</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// Equivalent to when(myBool === False)</span>
 <span class="w">    </span><span class="c1">// do something when myBool is False</span>
-<span class="p">}</span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
@@ -1555,8 +1560,8 @@ with zeros.</p></td>
 </tbody>
 </table>
 <div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="c1">// Add the carry to an SInt value</span>
-<span class="kd">val</span><span class="w"> </span><span class="n">carry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span>
-<span class="kd">val</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mySInt</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">carry</span><span class="p">.</span><span class="n">asSInt</span>
+<span class="kd">val</span><span class="w"> </span><span class="n">carry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
+<span class="kd">val</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mySInt</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">carry</span><span class="p">.</span><span class="n">asSInt</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
@@ -1580,10 +1585,10 @@ with zeros.</p></td>
 </tr>
 </tbody>
 </table>
-<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Bool</span><span class="p">()</span><span class="w"></span>
 
 <span class="c1">// Concatenation of three Bool into a single Bits(3 bits) type</span>
-<span class="kd">val</span><span class="w"> </span><span class="n">myBits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">##</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">##</span><span class="w"> </span><span class="n">c</span>
+<span class="kd">val</span><span class="w"> </span><span class="n">myBits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">##</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">##</span><span class="w"> </span><span class="n">c</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
@@ -1592,7 +1597,7 @@ with zeros.</p></td>
 <p>A masked boolean allows don’t care values. They are usually not used on their own but through <a class="reference internal" href="bits.html#maskedliteral"><span class="std std-ref">MaskedLiteral</span></a>.</p>
 <div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="c1">// first argument: Scala Boolean value</span>
 <span class="c1">// second argument: do we care ? expressed as a Scala Boolean</span>
-<span class="kd">val</span><span class="w"> </span><span class="n">masked</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">MaskedBoolean</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">)</span>
+<span class="kd">val</span><span class="w"> </span><span class="n">masked</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nc">MaskedBoolean</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
@@ -1617,7 +1622,7 @@ with zeros.</p></td>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2018 - 2024, SpinalHDL.</p>
+    <p>&#169; Copyright 2018 - 2025, SpinalHDL.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
@@ -1628,7 +1633,7 @@ with zeros.</p></td>
     <!-- source/_templates/footer.html -->
     
     <div class="doc-footer-current-version"><p>
-    Version: master git~843c6decd5 2024-10-07
+    Version: master git~4cdfdf7a60 2025-05-29
     </p></div>
     
 
@@ -1648,11 +1653,14 @@ with zeros.</p></td>
   <div class="rst-other-versions">
     <dl>
        <dt>Languages</dt>
-       <dd class="rtd-current-item">
-         <a href="#">en</a>
-       </dd>
        
-       <dd><a href="/SpinalDoc-RTD/zh_CN/index.html">zh_CN</a></dd>
+          
+            <dd class="rtd-current-item"><a href="#">en</a></dd>
+          
+       
+          
+            <dd><a href="../zh_CN/index.html">zh_CN</a></dd>
+          
        
     </dl>
     <dl>

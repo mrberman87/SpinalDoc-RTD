@@ -473,7 +473,7 @@
 <li class="toctree-l3"><a class="reference internal" href="registers.html#reset-value">Reset value</a></li>
 <li class="toctree-l3"><a class="reference internal" href="registers.html#initialization-value-for-simulation-purposes">Initialization value for simulation purposes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="registers.html#register-vectors">Register vectors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="registers.html#transforming-a-wire-into-a-register">Transforming a wire into a register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="registers.html#transforming-a-signal-into-a-register">Transforming a signal into a register</a></li>
 </ul>
 </li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">RAM/ROM Memory</a><ul>
@@ -684,6 +684,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../Libraries/fsm.html#statefsm">StateFsm</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../Libraries/fsm.html#stateparallelfsm">StateParallelFsm</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../Libraries/fsm.html#notes-about-the-entry-state">Notes about the entry state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Libraries/fsm.html#notes-about-using-state-value">Notes about using state value</a></li>
 </ul>
 </li>
 </ul>
@@ -840,7 +841,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#your-custom-link">Your custom Link</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#builder">Builder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#builders">Builders</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#stagepipeline">StagePipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#stagectrlpipeline">StageCtrlPipeline</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#composability">Composability</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#retiming-variable-length">Retiming / Variable length</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#simple-cpu-example">Simple CPU example</a></li>
@@ -1375,31 +1380,31 @@ For instance if you have a 32 bits memory word and provide a 4 bits mask then it
 <p>Memory ports in SpinalHDL are not inferred, but are explicitly defined. You should not use coding templates like in VHDL/Verilog to help the synthesis tool to infer memory.</p>
 </div>
 <p>Here is a example which infers a simple dual port ram (32 bits * 256):</p>
-<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">mem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Mem</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">32</span><span class="w"> </span><span class="n">bits</span><span class="p">),</span><span class="w"> </span><span class="n">wordCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">256</span><span class="p">)</span>
-<span class="n">mem</span><span class="p">.</span><span class="n">write</span><span class="p">(</span>
-<span class="w">  </span><span class="n">enable</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">writeValid</span><span class="p">,</span>
-<span class="w">  </span><span class="n">address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">writeAddress</span><span class="p">,</span>
-<span class="w">  </span><span class="n">data</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">writeData</span>
-<span class="p">)</span>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">mem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Mem</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">32</span><span class="w"> </span><span class="n">bits</span><span class="p">),</span><span class="w"> </span><span class="n">wordCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">256</span><span class="p">)</span><span class="w"></span>
+<span class="n">mem</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="w"></span>
+<span class="w">  </span><span class="n">enable</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">writeValid</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="n">address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">writeAddress</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="n">data</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">writeData</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
 
-<span class="n">io</span><span class="p">.</span><span class="n">readData</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">mem</span><span class="p">.</span><span class="n">readSync</span><span class="p">(</span>
-<span class="w">  </span><span class="n">enable</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">readValid</span><span class="p">,</span>
-<span class="w">  </span><span class="n">address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">readAddress</span>
-<span class="p">)</span>
+<span class="n">io</span><span class="p">.</span><span class="n">readData</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">mem</span><span class="p">.</span><span class="n">readSync</span><span class="p">(</span><span class="w"></span>
+<span class="w">  </span><span class="n">enable</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">readValid</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="n">address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">readAddress</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 <section id="synchronous-enable-quirk">
 <h2>Synchronous enable quirk<a class="headerlink" href="#synchronous-enable-quirk" title="Permalink to this heading"></a></h2>
 <p>When enable signals are used in a block guarded by a conditional block like <cite>when</cite>, only the enable signal will be generated as the access condition: the <cite>when</cite> condition is ignored.</p>
-<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">rom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Mem</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">10</span><span class="w"> </span><span class="n">bits</span><span class="p">),</span><span class="w"> </span><span class="mi">32</span><span class="p">)</span>
-<span class="n">when</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">io</span><span class="p">.</span><span class="n">rdata</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">rom</span><span class="p">.</span><span class="n">readSync</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">rdEna</span><span class="p">)</span>
-<span class="p">}</span>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">rom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Mem</span><span class="p">(</span><span class="nc">Bits</span><span class="p">(</span><span class="mi">10</span><span class="w"> </span><span class="n">bits</span><span class="p">),</span><span class="w"> </span><span class="mi">32</span><span class="p">)</span><span class="w"></span>
+<span class="n">when</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">io</span><span class="p">.</span><span class="n">rdata</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">rom</span><span class="p">.</span><span class="n">readSync</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">rdEna</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
 <p>In the example above the condition <cite>cond</cite> will not be elaborated.
 Prefer to include the condition <cite>cond</cite> in the enable signal directly as below.</p>
-<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">io</span><span class="p">.</span><span class="n">rdata</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">rom</span><span class="p">.</span><span class="n">readSync</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">rdEna</span><span class="w"> </span><span class="n">&amp;</span><span class="w"> </span><span class="n">cond</span><span class="p">)</span>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">io</span><span class="p">.</span><span class="n">rdata</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">rom</span><span class="p">.</span><span class="n">readSync</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">rdEna</span><span class="w"> </span><span class="n">&amp;</span><span class="w"> </span><span class="n">cond</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
@@ -1512,11 +1517,11 @@ Prefer to include the condition <cite>cond</cite> in the enable signal directly 
 <span id="automatic-memory-blackboxing"></span><h2>Automatic blackboxing<a class="headerlink" href="#automatic-blackboxing" title="Permalink to this heading"></a></h2>
 <p>Because it’s impossible to infer all ram kinds by using regular VHDL/Verilog, SpinalHDL integrates an optional automatic blackboxing system. This system looks at all memories present in your RTL netlist and replaces them with blackboxes. Then the generated code will rely on third party IP to provide the memory features, such as the read-during-write policy and mixed-width ports.</p>
 <p>Here is an example of how to enable blackboxing of memories by default:</p>
-<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span><span class="w"> </span><span class="nc">Array</span><span class="p">[</span><span class="nc">String</span><span class="p">])</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="nc">SpinalConfig</span><span class="p">()</span>
-<span class="w">    </span><span class="p">.</span><span class="n">addStandardMemBlackboxing</span><span class="p">(</span><span class="n">blackboxAll</span><span class="p">)</span>
-<span class="w">    </span><span class="p">.</span><span class="n">generateVhdl</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="nc">TopLevel</span><span class="p">)</span>
-<span class="p">}</span>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span><span class="w"> </span><span class="nc">Array</span><span class="p">[</span><span class="nc">String</span><span class="p">])</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nc">SpinalConfig</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">addStandardMemBlackboxing</span><span class="p">(</span><span class="n">blackboxAll</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">generateVhdl</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="nc">TopLevel</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
 <p>If the standard blackboxing tools don’t do enough for your design, do not hesitate to create a <a class="reference external" href="https://github.com/SpinalHDL/SpinalHDL/issues">Github issue</a>. There is also a way to create your own blackboxing tool.</p>
@@ -1537,32 +1542,47 @@ Prefer to include the condition <cite>cond</cite> in the enable signal directly 
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">blackboxAll</span></code></p></td>
 <td><div class="line-block">
 <div class="line">Blackbox all memory.</div>
-<div class="line">Throw an error on unblackboxable memory</div>
+<div class="line">Throw an error on unblackboxable memory.</div>
 </div>
 </td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">blackboxAllWhatsYouCan</span></code></p></td>
-<td><p>Blackbox all memory that is blackboxable</p></td>
+<td><p>Blackbox every memory that is replaceable.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">blackboxRequestedAndUninferable</span></code></p></td>
 <td><div class="line-block">
 <div class="line">Blackbox memory specified by the user and memory that is known to be uninferable (mixed-width, …).</div>
-<div class="line">Throw an error on unblackboxable memory</div>
+<div class="line">Throw an error on unblackboxable memory.</div>
 </div>
 </td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">blackboxOnlyIfRequested</span></code></p></td>
 <td><div class="line-block">
-<div class="line">Blackbox memory specified by the user</div>
-<div class="line">Throw an error on unblackboxable memory</div>
+<div class="line">Blackbox memory specified by the user.</div>
+<div class="line">Throw an error on unblackboxable memory.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">blackboxByteEnables</span></code></p></td>
+<td><div class="line-block">
+<div class="line">Blackbox every memory which use write port with byte mask.</div>
+<div class="line">Useful because synthesis tool don’t support an unified way to infer byte mask in verilog/VHDL.</div>
+<div class="line">Throw an error on unblackboxable memory.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">blackboxOnlyIfRequested</span></code></p></td>
+<td><div class="line-block">
+<div class="line">Blackbox memory specified by the user.</div>
+<div class="line">Throw an error on unblackboxable memory.</div>
 </div>
 </td>
 </tr>
 </tbody>
 </table>
 <p>To explicitly set a memory to be blackboxed, you can use its <code class="docutils literal notranslate"><span class="pre">generateAsBlackBox</span></code> function.</p>
-<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">mem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Mem</span><span class="p">(</span><span class="nc">Rgb</span><span class="p">(</span><span class="n">rgbConfig</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">16</span><span class="p">)</span>
-<span class="n">mem</span><span class="p">.</span><span class="n">generateAsBlackBox</span><span class="p">()</span>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="kd">val</span><span class="w"> </span><span class="n">mem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Mem</span><span class="p">(</span><span class="nc">Rgb</span><span class="p">(</span><span class="n">rgbConfig</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">16</span><span class="p">)</span><span class="w"></span>
+<span class="n">mem</span><span class="p">.</span><span class="n">generateAsBlackBox</span><span class="p">()</span><span class="w"></span>
 </pre></div>
 </div>
 <p>You can also define your own blackboxing policy by extending the <code class="docutils literal notranslate"><span class="pre">MemBlackboxingPolicy</span></code> class.</p>
@@ -1609,7 +1629,7 @@ Prefer to include the condition <cite>cond</cite> in the enable signal directly 
     <span class="n">wrMaskEnable</span> <span class="p">:</span> <span class="kt">boolean</span><span class="p">;</span>
     <span class="n">rdAddressWidth</span> <span class="p">:</span> <span class="kt">integer</span><span class="p">;</span>
     <span class="n">rdDataWidth</span> <span class="p">:</span> <span class="kt">integer</span><span class="p">;</span>
-    <span class="n">rdEnEnable</span> <span class="p">:</span> <span class="kt">boolean</span>
+    <span class="n">rdLatency</span> <span class="p">:</span> <span class="kt">integer</span> <span class="c1">-- Cycles between the rd_en and the actual value on rd_data ports. It will be set to 1, unless the you added the MemReadBufferPhase to the SpinalConfig and the ram can merge a register on the read data path.</span>
   <span class="p">);</span>
   <span class="n">port</span><span class="p">(</span>
     <span class="n">wr_clk</span> <span class="p">:</span> <span class="ow">in</span> <span class="n">std_logic</span><span class="p">;</span>
@@ -1620,6 +1640,7 @@ Prefer to include the condition <cite>cond</cite> in the enable signal directly 
     <span class="n">rd_clk</span> <span class="p">:</span> <span class="ow">in</span> <span class="n">std_logic</span><span class="p">;</span>
     <span class="n">rd_en</span> <span class="p">:</span> <span class="ow">in</span> <span class="n">std_logic</span><span class="p">;</span>
     <span class="n">rd_addr</span> <span class="p">:</span> <span class="ow">in</span> <span class="n">unsigned</span><span class="p">;</span>
+    <span class="n">rd_dataEn</span> <span class="p">:</span> <span class="ow">in</span> <span class="n">std_logic</span><span class="p">;</span> <span class="c1">-- Only used if rdLatency &gt; 1, drive the enable of rd_data flip flops</span>
     <span class="n">rd_data</span> <span class="p">:</span> <span class="kr">out</span> <span class="n">std_logic_vector</span>
   <span class="p">);</span>
 <span class="kr">end</span> <span class="nf">component</span><span class="p">;</span>
@@ -1690,8 +1711,8 @@ There are currently 4 kinds of technologies possible:</p>
 <p>Blackboxing can insert HDL attributes if <code class="docutils literal notranslate"><span class="pre">SpinalConfig#setDevice(Device)</span></code>
 has been configured for your device-vendor.</p>
 <p>The resulting HDL attributes might look like:</p>
-<div class="highlight-verilog notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">*</span><span class="w"> </span><span class="n">ram_style</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;distributed&quot;</span><span class="w"> </span><span class="o">*</span><span class="p">)</span>
-<span class="p">(</span><span class="o">*</span><span class="w"> </span><span class="n">ramsyle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;no_rw_check&quot;</span><span class="w"> </span><span class="o">*</span><span class="p">)</span>
+<div class="highlight-verilog notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">*</span><span class="w"> </span><span class="n">ram_style</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;distributed&quot;</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"></span>
+<span class="p">(</span><span class="o">*</span><span class="w"> </span><span class="n">ramsyle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;no_rw_check&quot;</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 <p>SpinalHDL tries to support many common memory types provided by well known
@@ -1724,7 +1745,7 @@ mechanism.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2018 - 2024, SpinalHDL.</p>
+    <p>&#169; Copyright 2018 - 2025, SpinalHDL.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
@@ -1735,7 +1756,7 @@ mechanism.</p>
     <!-- source/_templates/footer.html -->
     
     <div class="doc-footer-current-version"><p>
-    Version: master git~843c6decd5 2024-10-07
+    Version: master git~4cdfdf7a60 2025-05-29
     </p></div>
     
 
@@ -1755,11 +1776,14 @@ mechanism.</p>
   <div class="rst-other-versions">
     <dl>
        <dt>Languages</dt>
-       <dd class="rtd-current-item">
-         <a href="#">en</a>
-       </dd>
        
-       <dd><a href="/SpinalDoc-RTD/zh_CN/index.html">zh_CN</a></dd>
+          
+            <dd class="rtd-current-item"><a href="#">en</a></dd>
+          
+       
+          
+            <dd><a href="../zh_CN/index.html">zh_CN</a></dd>
+          
        
     </dl>
     <dl>

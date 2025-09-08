@@ -473,7 +473,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../Sequential%20logic/registers.html#reset-value">Reset value</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../Sequential%20logic/registers.html#initialization-value-for-simulation-purposes">Initialization value for simulation purposes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../Sequential%20logic/registers.html#register-vectors">Register vectors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../Sequential%20logic/registers.html#transforming-a-wire-into-a-register">Transforming a wire into a register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Sequential%20logic/registers.html#transforming-a-signal-into-a-register">Transforming a signal into a register</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../Sequential%20logic/memory.html">RAM/ROM Memory</a><ul>
@@ -684,6 +684,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../Libraries/fsm.html#statefsm">StateFsm</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../Libraries/fsm.html#stateparallelfsm">StateParallelFsm</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../Libraries/fsm.html#notes-about-the-entry-state">Notes about the entry state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Libraries/fsm.html#notes-about-using-state-value">Notes about using state value</a></li>
 </ul>
 </li>
 </ul>
@@ -840,7 +841,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../../Libraries/Pipeline/introduction.html#your-custom-link">Your custom Link</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../../Libraries/Pipeline/introduction.html#builder">Builder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Libraries/Pipeline/introduction.html#builders">Builders</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../Libraries/Pipeline/introduction.html#stagepipeline">StagePipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Libraries/Pipeline/introduction.html#stagectrlpipeline">StageCtrlPipeline</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../../Libraries/Pipeline/introduction.html#composability">Composability</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../Libraries/Pipeline/introduction.html#retiming-variable-length">Retiming / Variable length</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../Libraries/Pipeline/introduction.html#simple-cpu-example">Simple CPU example</a></li>
@@ -1247,15 +1252,15 @@ can skip the instructions below - but you need to activate the oss-cad-suite env
 The C++ library boost-interprocess, which is contained in the libboost-dev package in debian-like distributions, has to be installed too. boost-interprocess is required to generate the shared memory communication interface.</p>
 <section id="linux">
 <h2>Linux<a class="headerlink" href="#linux" title="Permalink to this heading"></a></h2>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>build-essential<span class="w"> </span>libboost-dev<span class="w"> </span>git
-sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>gnat<span class="w"> </span><span class="c1"># Ada compiler used to buid GHDL</span>
-git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ghdl/ghdl.git
-<span class="nb">cd</span><span class="w"> </span>ghdl
-mkdir<span class="w"> </span>build
-<span class="nb">cd</span><span class="w"> </span>build
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo apt-get install build-essential libboost-dev git
+sudo apt-get install gnat <span class="c1"># Ada compiler used to buid GHDL</span>
+git clone https://github.com/ghdl/ghdl.git
+<span class="nb">cd</span> ghdl
+mkdir build
+<span class="nb">cd</span> build
 ../configure
 make
-sudo<span class="w"> </span>make<span class="w"> </span>install
+sudo make install
 </pre></div>
 </div>
 <p>Also the openjdk package that corresponds to your Java version has to be installed.</p>
@@ -1281,7 +1286,7 @@ sudo<span class="w"> </span>make<span class="w"> </span>install
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2018 - 2024, SpinalHDL.</p>
+    <p>&#169; Copyright 2018 - 2025, SpinalHDL.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
@@ -1292,7 +1297,7 @@ sudo<span class="w"> </span>make<span class="w"> </span>install
     <!-- source/_templates/footer.html -->
     
     <div class="doc-footer-current-version"><p>
-    Version: master git~843c6decd5 2024-10-07
+    Version: master git~4cdfdf7a60 2025-05-29
     </p></div>
     
 
@@ -1312,11 +1317,14 @@ sudo<span class="w"> </span>make<span class="w"> </span>install
   <div class="rst-other-versions">
     <dl>
        <dt>Languages</dt>
-       <dd class="rtd-current-item">
-         <a href="#">en</a>
-       </dd>
        
-       <dd><a href="/SpinalDoc-RTD/zh_CN/index.html">zh_CN</a></dd>
+          
+            <dd class="rtd-current-item"><a href="#">en</a></dd>
+          
+       
+          
+            <dd><a href="../zh_CN/index.html">zh_CN</a></dd>
+          
        
     </dl>
     <dl>

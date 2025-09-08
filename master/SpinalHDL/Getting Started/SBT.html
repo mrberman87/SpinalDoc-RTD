@@ -473,7 +473,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../Sequential%20logic/registers.html#reset-value">Reset value</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../Sequential%20logic/registers.html#initialization-value-for-simulation-purposes">Initialization value for simulation purposes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../Sequential%20logic/registers.html#register-vectors">Register vectors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../Sequential%20logic/registers.html#transforming-a-wire-into-a-register">Transforming a wire into a register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Sequential%20logic/registers.html#transforming-a-signal-into-a-register">Transforming a signal into a register</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../Sequential%20logic/memory.html">RAM/ROM Memory</a><ul>
@@ -684,6 +684,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../Libraries/fsm.html#statefsm">StateFsm</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../Libraries/fsm.html#stateparallelfsm">StateParallelFsm</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../Libraries/fsm.html#notes-about-the-entry-state">Notes about the entry state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Libraries/fsm.html#notes-about-using-state-value">Notes about using state value</a></li>
 </ul>
 </li>
 </ul>
@@ -840,7 +841,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#your-custom-link">Your custom Link</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#builder">Builder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#builders">Builders</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#stagepipeline">StagePipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#stagectrlpipeline">StageCtrlPipeline</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#composability">Composability</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#retiming-variable-length">Retiming / Variable length</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../Libraries/Pipeline/introduction.html#simple-cpu-example">Simple CPU example</a></li>
@@ -1240,7 +1245,7 @@
 <p>First, open a terminal in the root of the template you have downloaded earlier
 in <a class="reference internal" href="Install%20and%20setup.html#template"><span class="std std-ref">Create a first SpinalHDL project</span></a>.</p>
 <p>Commands can be executed right from the terminal:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sbt<span class="w"> </span><span class="s2">&quot;firstCommand with arguments&quot;</span><span class="w"> </span><span class="s2">&quot;secondCommand with more arguments&quot;</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sbt <span class="s2">&quot;firstCommand with arguments&quot;</span> <span class="s2">&quot;secondCommand with more arguments&quot;</span>
 </pre></div>
 </div>
 <p>But <code class="docutils literal notranslate"><span class="pre">sbt</span></code> has a quite long boot time so the we recommend to use its
@@ -1304,7 +1309,7 @@ while you are editing the source files.</p>
 <p>You can press Enter to stop automatic generation, then Ctrl-D to exit <code class="docutils literal notranslate"><span class="pre">sbt</span></code>.</p>
 <p>It is also possible to start it right from the terminal, without using <code class="docutils literal notranslate"><span class="pre">sbt</span></code>’s
 interactive prompt:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sbt<span class="w"> </span><span class="s2">&quot;~ runMain mylib.MyTopLevelVerilog&quot;</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sbt <span class="s2">&quot;~ runMain mylib.MyTopLevelVerilog&quot;</span>
 </pre></div>
 </div>
 <p>Now you can use your environment, let’s explore the code: <a class="reference internal" href="../Introduction/A%20simple%20example.html#simple-example"><span class="std std-ref">A simple example</span></a>.</p>
@@ -1328,7 +1333,7 @@ interactive prompt:</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2018 - 2024, SpinalHDL.</p>
+    <p>&#169; Copyright 2018 - 2025, SpinalHDL.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
@@ -1339,7 +1344,7 @@ interactive prompt:</p>
     <!-- source/_templates/footer.html -->
     
     <div class="doc-footer-current-version"><p>
-    Version: master git~843c6decd5 2024-10-07
+    Version: master git~4cdfdf7a60 2025-05-29
     </p></div>
     
 
@@ -1359,11 +1364,14 @@ interactive prompt:</p>
   <div class="rst-other-versions">
     <dl>
        <dt>Languages</dt>
-       <dd class="rtd-current-item">
-         <a href="#">en</a>
-       </dd>
        
-       <dd><a href="/SpinalDoc-RTD/zh_CN/index.html">zh_CN</a></dd>
+          
+            <dd class="rtd-current-item"><a href="#">en</a></dd>
+          
+       
+          
+            <dd><a href="../zh_CN/index.html">zh_CN</a></dd>
+          
        
     </dl>
     <dl>
